@@ -2,17 +2,6 @@
 
 Introduction to supervised machine learning, with a focus on classification. Decision trees, SVM, Naive Bayes, and basic machine learning concepts such as generalization error and overfitting.
 
-## Teaching Team
-
-| Position | Name  | Slack Handle | GHE Handle |
-| :------: | :---: | :----------: | :--------: |
-| Lecture Instructor | Mike Gelbart | `@mgelbart` | `@mgelbart` |
-| Lab Instructor | Varada Kolhatkar | `@Varada` | `@kvarada` |
-| Teaching Assistant (L01) | Jasmine Ju | `@Jasmine Ju` | `@xmengju` |
-| Teaching assistant (L02) | Joseph Khoury  | `@joseph` | `@josephjk` |
-| Teaching Assistant (L03) | Clement Fung | `@Clement Fung` | `@cfung1` |
-
-
 ## Schedule
 
 **Course structure**: this course will be delivered as a [flipped classroom](https://en.wikipedia.org/wiki/Flipped_classroom), which means you are expected to watch the lecture videos _before_ class. While you're not expected to understand everything just from watching a video once, you're expected to come to class with a basic familiarity of what it's all about; we won't be starting again from scratch in class. During the lecture time itself, we will work on practical examples in Python. As a result of the extra 1-2 hours of time spent watching the videos per week, we will aim to make the labs shorter than in other courses.
