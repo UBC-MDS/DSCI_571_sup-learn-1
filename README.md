@@ -22,16 +22,6 @@ Introduction to supervised machine learning, with a focus on classification. Dec
 |   7   | 2018-12-05 | [Linear classifiers](lectures/lecture7.ipynb) | [Part of the linear classifier prediction video](https://youtu.be/GMEDGjpJycA?t=436), first part of [linear classifier training video](https://youtu.be/yw2AJZ491S0) **up to 7:00**. <br>Note: the part in the first video about the Perceptron Algorithm is optional, though it's somewhat relevant to DSCI 572 and also has historical significance.<br>Note: unlike the previous videos, here there is a jump from the previous lecture (ensembles, CPSC 340 lecture 7) to this one (linear classifiers, CPSC 340 lecture 18), which may cause a bit of chaos. You will hear words like "regularization" that you may not understand (coming in DSCI 573); when this happens, don't panic. |
 |   8   | 2018-12-10 | [Kernels, DSCI 571 review, Blocks 4-6 roadmap, outliers](lectures/lecture8.ipynb)    | _This lecture is optional; you will not be tested on content from it._ |
 
-## Lab Assignments
-
-| #    | Lectures covered   | Due date |
-|-----|-------------|----------|
-| 1 | 1 | 2018-11-17 18:00
-| 2 | 2 & 3 | 2018-11-24 18:00
-| 3 | 4 & 5 | 2018-12-01 18:00
-| 4 | 6 & 7 | 2018-12-07 18:00
-
-
 ## Reference Material
 
 #### Books
