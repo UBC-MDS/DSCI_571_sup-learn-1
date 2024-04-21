@@ -6,6 +6,109 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.model_selection import cross_validate, train_test_split
 from sklearn.svm import SVC
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import CountVectorizer
+import imageio
+
+
+
+# adapted from mglearn https://github.com/amueller/mglearn/blob/master/mglearn/tools.py
+def my_heatmap(values, xlabel, ylabel, xticklabels, yticklabels, cmap=None,
+            vmin=None, vmax=None, ax=None, fmt="%0.2f"):
+    if ax is None:
+        ax = plt.gca()
+    # plot the mean cross-validation scores
+    img = ax.pcolor(values, cmap=cmap, vmin=vmin, vmax=vmax)
+    img.update_scalarmappable()
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_xticks(np.arange(len(xticklabels)) + .5)
+    ax.set_yticks(np.arange(len(yticklabels)) + .5)
+    ax.set_xticklabels(xticklabels)
+    ax.set_yticklabels(yticklabels)
+    ax.set_aspect(1)
+
+    
+    iteration = 0
+    for p, color, value in zip(img.get_paths(), img.get_facecolors(),
+                               img.get_array().flatten()):
+        x, y = p.vertices[:-2, :].mean(0)
+        if np.mean(color[:3]) > 0.5:
+            c = 'k'
+        else:
+            c = 'w'        
+        ax.text(x, y, fmt % value, color=c, ha="center", va="center")
+    return img
+
+from scipy.stats import norm
+def plot_gaussians(df, feat_names=['Weight (in grams)', 'Sugar Content (in %)']):
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5))
+    
+    # Iterate over each feature
+    for ax, feature in zip(axes, feat_names):
+        for fruit, color in [('Apple', 'red'), ('Orange', 'orange')]:
+            subset = df[df['Fruit'] == fruit]
+            mu = subset[feature].mean()
+            sigma = subset[feature].std()
+            x = np.linspace(mu - 4*sigma, mu + 4*sigma, 1000)
+            ax.plot(x, norm.pdf(x, mu, sigma), c=color, label=f'{fruit} Gaussian')
+            ax.set_title(f'Gaussian for {feature}')
+            ax.legend()
+    
+    plt.tight_layout()
+    plt.show()
+    
+def plot_top_k_words(data, k=20, target="spam"):
+    countvec = CountVectorizer(binary=True, stop_words='english')
+    data_vec = countvec.fit_transform(data)
+    feature_names = countvec.get_feature_names_out()    
+    word_counts = data_vec.sum(axis=0).A1
+    sorted_indices = np.argsort(word_counts)[::-1][:k]
+    top_k_words = [feature_names[i] for i in sorted_indices]
+    top_k_counts = word_counts[sorted_indices]
+    
+    # plot
+    plt.figure(figsize=(8, 6))
+    plt.bar(top_k_words, top_k_counts)
+    plt.xticks(rotation=45)
+    plt.xlabel('Words')
+    plt.ylabel('Frequencies')
+    plt.title(f'Top k Words and Frequencies for target: {target}')
+    plt.show()
+
+def plot_word_freq(data, query_words=['block', 'free', 'prize', 'urgent'], target="target"):
+    countvec = CountVectorizer(binary=True, stop_words='english')
+    data_vec = countvec.fit_transform(data)
+    feature_names = countvec.get_feature_names_out()    
+    word_counts = data_vec.sum(axis=0).A1
+    word_count_dict = dict(zip(feature_names, word_counts))
+    query_counts = {word: word_count_dict.get(word, 0) for word in query_words}
+    return query_counts
+
+def plot_spam_ham_word_freq(spam_data, ham_data):
+    #plot
+    fig, ax = plt.subplots(
+        1,
+        2,
+        figsize=(12, 4))
+    query_counts = plot_word_freq(spam_data, target="spam")
+    spam_words = list(query_counts.keys())
+    spam_counts = list(query_counts.values())
+    ax[0].bar(spam_words, spam_counts)   
+    ax[0].set_xticklabels(labels=spam_words, rotation=45)    
+    ax[0].set_xlabel('Words')
+    ax[0].set_ylabel('Frequencies')
+    ax[0].set_title(f'spam words frequencies')
+    
+    query_counts = plot_word_freq(ham_data, target="ham")
+    ham_words = list(query_counts.keys())
+    ham_counts = list(query_counts.values())
+    ax[1].bar(ham_words, ham_counts)   
+    ax[1].set_xticklabels(labels=ham_words, rotation=45)    
+    ax[1].set_xlabel('Words')    
+    ax[1].set_title(f'ham words frequencies')
+    
 
 def plot_tree_decision_boundary(
     model, X, y, x_label="x-axis", y_label="y-axis", eps=None, ax=None, title=None
@@ -26,7 +129,7 @@ def plot_tree_decision_boundary(
 
 
 def plot_tree_decision_boundary_and_tree(
-    model, X, y, height=6, width=16, x_label="x-axis", y_label="y-axis", eps=None
+    model, X, y, height=6, width=16, fontsize = 9, x_label="x-axis", y_label="y-axis", eps=None
 ):
     fig, ax = plt.subplots(
         1,
@@ -36,13 +139,16 @@ def plot_tree_decision_boundary_and_tree(
         gridspec_kw={"width_ratios": [1.5, 2]},
     )
     plot_tree_decision_boundary(model, X, y, x_label, y_label, eps, ax=ax[0])
-    ax[1].imshow(tree_image(X.columns, model))
+    custom_plot_tree(model, 
+                 feature_names=X.columns.tolist(), 
+                 class_names=['A+', 'not A+'],
+                 impurity=False,
+                 fontsize=fontsize, ax=ax[1])
     ax[1].set_axis_off()
     plt.show()
     
 def plot_fruit_tree(ax=None):
     import graphviz
-
     if ax is None:
         ax = plt.gca()
     mygraph = graphviz.Digraph(
@@ -62,9 +168,8 @@ def plot_fruit_tree(ax=None):
     mygraph.edge("2", "5", label="True")
     mygraph.edge("2", "6", label="False")
     mygraph.render("tmp")
-    ax.imshow(imread("tmp.png"))
-    ax.set_axis_off()    
-    
+    ax.imshow(imageio.v2.imread("tmp.png"))
+    ax.set_axis_off()        
 
 def plot_knn_clf(X_train, y_train, X_test, n_neighbors=1, class_names=['class 0','class 1'], test_format='star'):
     # credit: This function is based on: https://github.com/amueller/mglearn/blob/master/mglearn/plot_knn_classification.py
@@ -100,7 +205,7 @@ def plot_knn_decision_boundaries(X_train, y_train, k_values = [1,11,100]):
             clf, X_train.to_numpy(), fill=True, eps=0.5, ax=ax, alpha=0.4
         )
         mglearn.discrete_scatter(X_train.iloc[:, 0], X_train.iloc[:, 1], y_train, ax=ax)
-        title = "n_neighbors={}\n train score={}\n valid score={}".format(
+        title = "n_neighbors={}\n train score={}, valid score={}".format(
             n_neighbors, round(mean_train_score, 2), round(mean_valid_score, 2)
         )
         ax.set_title(title)
@@ -148,7 +253,7 @@ def plot_svc_gamma(param_grid, X_train, y_train, x_label="longitude", y_label='l
             clf, X_train, fill=True, eps=0.5, ax=ax, alpha=0.4
         )
         mglearn.discrete_scatter(X_train[:, 0], X_train[:, 1], y_train, ax=ax)
-        title = "gamma={}\n train score={}\n valid score={}".format(
+        title = "gamma={}\n train score={}, valid score={}".format(
             gamma, round(mean_train_score, 2), round(mean_valid_score, 2)
         )
         ax.set_title(title)
@@ -168,7 +273,7 @@ def plot_svc_C(param_grid, X_train, y_train, x_label="longitude", y_label='latit
             clf, X_train, fill=True, eps=0.5, ax=ax, alpha=0.4
         )
         mglearn.discrete_scatter(X_train[:, 0], X_train[:, 1], y_train, ax=ax)
-        title = "C={}\n train score={} \nvalid score={}".format(
+        title = "C={}\n train score={}, valid score={}".format(
             C, round(mean_train_score, 2), round(mean_valid_score, 2)
         )
         ax.set_title(title)
@@ -290,7 +395,8 @@ def plot_original_scaled(
     )
     axes[1].legend(loc="upper right")
     axes[1].set_title(title_transformed);    
-
+    
+    
 def plot_logistic_regression(x, w):
     import graphviz
     sentiment = 'pos' if sum(w) > 0 else 'neg'    
@@ -330,12 +436,103 @@ def plot_confusion_matrix_ex(tn, fp, fn, tp, target='Fraud'):
 
     plt.xlim(0, 1)
     plt.ylim(0, 1)
+    
 
+def plot_confusion_matrix_example(tn, fp, fn, tp, target='Fraud'):
+    fig, ax = plt.subplots(1, 2, figsize=(20, 6), subplot_kw={'xticks': (), 'yticks': ()})
+
+    plt.setp(ax, xticks=[.25, .75], xticklabels=["predicted not " + target, "predicted " + target],
+       yticks=[.25, .75], yticklabels=["true " + target, "true not " + target ])    
+    confusion = np.array([[tn, fp], [fn, tp]])
+    ax[0].text(0.40, .7, confusion[0, 0], size=45, horizontalalignment='right')
+    ax[0].text(0.40, .2, confusion[1, 0], size=45, horizontalalignment='right')
+    ax[0].text(.90, .7, confusion[0, 1], size=45, horizontalalignment='right')
+    ax[0].text(.90, 0.2, confusion[1, 1], size=45, horizontalalignment='right')
+    ax[0].plot([.5, .5], [0, 1], '--', c='k')
+    ax[0].plot([0, 1], [.5, .5], '--', c='k')
+
+    ax[0].set_xlim(0, 1)
+    ax[0].set_ylim(0, 1)    
+    
+    ax[1].text(0.45, .6, "TN", size=100, horizontalalignment='right')
+    ax[1].text(0.45, .1, "FN", size=100, horizontalalignment='right')
+    ax[1].text(.95, .6, "FP", size=100, horizontalalignment='right')
+    ax[1].text(.95, 0.1, "TP", size=100, horizontalalignment='right')
+    ax[1].plot([.5, .5], [0, 1], '--', c='k')
+    ax[1].plot([0, 1], [.5, .5], '--', c='k')
+    ax[1].yaxis.set_tick_params(labelsize=12)
+    ax[1].set_xlim(0, 1)
+    ax[1].set_ylim(0, 1)  
+    
+def make_num_tree_plot(preprocessor, X_train, y_train, X_test, y_test, num_trees, scoring_metric='accuracy'):
+    """
+    Make number of trees vs error rate plot for RandomForestClassifier
+
+    Parameters
+    ----------
+    model: sklearn classifier model
+        The sklearn model
+    X_train: numpy.ndarray
+        The X part of the train set
+    y_train: numpy.ndarray
+        The y part of the train set
+    X_test: numpy.ndarray
+        The X part of the test/validation set
+    y_test: numpy.ndarray
+        The y part of the test/validation set
+    num_trees: int
+        The value for `n_estimators` argument of RandomForestClassifier
+    Returns
+    -------
+        None
+        Shows the number of trees vs error rate plot
+
+    """
+    train_scores = []
+    test_scores = []
+    for ntree in num_trees:
+        model = make_pipeline(preprocessor, RandomForestClassifier(n_estimators=ntree))
+        scores = cross_validate(
+            model, X_train, y_train, return_train_score=True, scoring=scoring_metric
+        )
+        train_scores.append(np.mean(scores["train_score"]))
+        test_scores.append(np.mean(scores["test_score"]))
+
+    plt.semilogx(num_trees, train_scores, label="train")
+    plt.semilogx(num_trees, test_scores, label="cv")
+    plt.legend()
+    plt.xlabel("number of trees")
+    plt.ylabel("scores") 
+
+def plot_probs(lr, X_train, y_train):
+    fig, axes = plt.subplots(1, 2, figsize=(18, 5))
+    from matplotlib.colors import ListedColormap
+    
+    for ax in axes:
+        mglearn.discrete_scatter(
+            X_train[:, 0], X_train[:, 1], y_train, markers="o", ax=ax
+        )
+        ax.set_xlabel("longitude")
+        ax.set_ylabel("latitude")
+    
+    axes[0].legend(["Train class 0", "Train class 1"], ncol=2, loc=(0.1, 1.1))
+    
+    mglearn.plots.plot_2d_separator(
+        lr, X_train, fill=True, eps=0.5, ax=axes[0], alpha=0.5
+    )
+    mglearn.plots.plot_2d_separator(
+        lr, X_train, fill=False, eps=0.5, ax=axes[1], alpha=0.5
+    )
+    scores_image = mglearn.tools.plot_2d_scores(
+        lr, X_train, eps=0.5, ax=axes[1], alpha=0.5, cm=plt.cm.coolwarm
+    )
+    cbar = plt.colorbar(scores_image, ax=axes.tolist())
+    
 #[Code credit](https://learning.oreilly.com/library/view/introduction-to-machine/9781449369880/ch02.html#linear-models)
 def plot_multiclass_lr_ovr(lr, X_train, y_train, n_classes, test_points=None, decision_boundary=False):    
     mglearn.discrete_scatter(X_train[:, 0], X_train[:, 1], y_train)
     line = np.linspace(-15, 15)
-    colors = ['b','g','r','c', 'm','y', 'bisque', 'olivedrab']
+    colors = ['b','r','g','c', 'm','y', 'bisque', 'olivedrab']
     for coef, intercept, color in zip(lr.coef_, lr.intercept_, colors[:n_classes]):
         plt.plot(line, -(line * coef[0] + intercept) / coef[1], c=color)
     plt.ylim(-10, 15)
@@ -356,3 +553,4 @@ def plot_multiclass_lr_ovr(lr, X_train, y_train, n_classes, test_points=None, de
             plt.plot(test_point[0], test_point[1], "k*", markersize=16)
     if decision_boundary:
         mglearn.plots.plot_2d_classification(lr, X_train, fill=True, alpha=0.7)
+        

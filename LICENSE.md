@@ -2,7 +2,7 @@
 
 ## Instructional Material
 
-All instructional material in this repository is made available under the **Attribution 4.0 International** ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)). 
+All instructional material in this repository is made available under the **Attribution 4.0 International** ([CC BY 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)). 
 
 
 This is a human-readable summary of (and not a substitute for) the [license](https://creativecommons.org/licenses/by/4.0/legalcode). 
@@ -34,7 +34,7 @@ Except where otherwise noted, the example programs and other software provided i
 
 MIT License
 
-Copyright (c) 2021 Varada Kolhatkar and Mike Gelbart 
+Copyright (c) 2022 Varada Kolhatkar and Mike Gelbart 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
