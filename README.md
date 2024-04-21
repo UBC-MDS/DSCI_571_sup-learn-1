@@ -4,15 +4,8 @@ Welcome to DSCI 571: Supervised Learning I! This course introduces fundamental c
 
 ## Important links 
 
-- [Course Jupyter book](https://pages.github.ubc.ca/mds-2023-24/DSCI_571_sup-learn-1_students/README.html)
-- [Course GitHub page](https://github.ubc.ca/MDS-2023-24/DSCI_571_sup-learn-1_students)
-- [Slack Channel](https://ubc-mds.slack.com/messages/571_sup-learn-1)
-- [Canvas](https://canvas.ubc.ca/courses/123600)
-- [Gradescope](https://www.gradescope.ca/courses/11554)
-- [iClicker Cloud](https://join.iclicker.com/DAZZ)
-- [Reflection Google document](https://docs.google.com/document/d/109zUOV_j3Q12rnKFWWg7JXeCmqXKoWVtioSvEGyDuVw/edit?usp=sharing)
+- [Course Jupyter book](https://ubc-mds.github.io/DSCI_571_sup-learn-1/README.html)
 - [YouTube videos](https://www.youtube.com/playlist?list=PLHofvQE1VlGtZoAULxcHb7lOsMved0CuM)
-- [Class + office hours calendar](https://ubc-mds.github.io/calendar/)
 
 ## Course learning outcomes    
 
