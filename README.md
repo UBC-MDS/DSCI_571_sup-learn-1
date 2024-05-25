@@ -4,7 +4,6 @@ Welcome to DSCI 571: Supervised Learning I! This course introduces fundamental c
 
 ## Important links 
 
-- [Course Jupyter book](https://ubc-mds.github.io/DSCI_571_sup-learn-1/README.html)
 - [YouTube videos](https://www.youtube.com/playlist?list=PLHofvQE1VlGtZoAULxcHb7lOsMved0CuM)
 
 ## Course learning outcomes    
