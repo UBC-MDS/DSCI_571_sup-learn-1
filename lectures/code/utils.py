@@ -43,7 +43,7 @@ def custom_plot_tree(tree_model, feature_names=None, class_names=None, **kwargs)
     
     # Customize the appearance of the text elements for each node
     for text in plt.gca().texts:
-        new_text = re.sub('samples = \d+\n', '', text.get_text()) # Hide samples
+        new_text = re.sub('samples = .*\n', '', text.get_text()) # Hide samples
         text.set_text(new_text) 
     
     plt.show()
@@ -83,6 +83,6 @@ def mean_std_cross_val_scores(model, X_train, y_train, **kwargs):
     out_col = []
 
     for i in range(len(mean_scores)):
-        out_col.append((f"%0.3f (+/- %0.3f)" % (mean_scores[i], std_scores[i])))
+        out_col.append((f"%0.3f (+/- %0.3f)" % (mean_scores.iloc[i], std_scores.iloc[i])))
 
     return pd.Series(data=out_col, index=mean_scores.index)

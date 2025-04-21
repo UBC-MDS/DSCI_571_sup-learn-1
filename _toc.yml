@@ -1,0 +1,74 @@
+format: jb-book
+root: README
+
+parts: 
+- caption: Course Information
+  chapters:   
+  - file: learning_objectives  
+- caption: Notes
+  chapters: 
+  - file: lectures/notes/00_motivation-course-information.ipynb  
+  - file: lectures/notes/01_terminology-baselines-decision-trees.ipynb
+  - file: lectures/notes/02_ml-fundamentals.ipynb
+  - file: lectures/notes/03_kNNs-SVM-RBF.ipynb
+  - file: lectures/notes/04_preprocessing-pipelines-column-transformer.ipynb
+  - file: lectures/notes/05_more-preprocessing-text-feats.ipynb  
+  - file: lectures/notes/06_hyperparameter-optimization.ipynb
+  - file: lectures/notes/07_naive-Bayes.ipynb
+  - file: lectures/notes/08_linear-models.ipynb
+  - file: lectures/notes/appendixA_multiclass-strategies.ipynb
+  
+- caption: Class Demos
+  chapters: 
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_02-ml-fundamentals.ipynb
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_03-kNNs-SVMs.ipynb
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_04-preprocessing.ipynb
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_05-text-features.ipynb  
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_06-hyperparameter-optimization.ipynb    
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_07-naive-Bayes.ipynb    
+  - file: lectures/002-regressors-Varada-lectures/class_demos/demo_08-logistic-regression.ipynb      
+
+- caption: Section slides
+  chapters:
+  - file: lectures/001-classifiers-Prajeet-lectures/README
+    sections:
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-01.html"
+        title: Lecture 1
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-02.html"
+        title: Lecture 2
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-03.html"
+        title: Lecture 3
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-04.html"
+        title: Lecture 4
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-05.html"
+        title: Lecture 5        
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-06.html"
+        title: Lecture 6        
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-07.html"
+        title: Lecture 7        
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-08.html"
+        title: Lecture 8        
+        
+  - file: lectures/002-regressors-Varada-lectures/README
+    sections:
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-01.html"
+        title: Lecture 1
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-02.html"
+        title: Lecture 2                
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-03.html"
+        title: Lecture 3                
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-04.html"
+        title: Lecture 4                
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-05.html"
+        title: Lecture 5                
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-06.html"
+        title: Lecture 6                
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-07.html"
+        title: Lecture 7                
+      - url: "https://pages.github.ubc.ca/mds-2024-25/DSCI_571-002-slides/lecture-08.html"
+        title: Lecture 8                
+
+- caption: Attribution
+  chapters: 
+  - file: attribution
+  - file: LICENSE  
